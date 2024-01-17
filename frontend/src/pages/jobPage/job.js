@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import DeleteConfirmationModal from "../../components/JobPageComponents/DeleteModel";
 import BlueCommenBtn from "../../components/commen/BlueCommenBtn";
-
+import { Helmet } from "react-helmet";
 
 const JobsPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -21,8 +21,17 @@ const JobsPage = () => {
     setShowDeleteModal(true);
   };
 
-  const handleUpdate = ({ _id, title, notes, subTotal, tax, total, tags, jobsData }) => {
-    setUpdateData({  _id, title, notes, subTotal, tax, total, tags, jobsData});
+  const handleUpdate = ({
+    _id,
+    title,
+    notes,
+    subTotal,
+    tax,
+    total,
+    tags,
+    jobsData,
+  }) => {
+    setUpdateData({ _id, title, notes, subTotal, tax, total, tags, jobsData });
     setShowAddJobsModal(true);
   };
 
@@ -48,13 +57,24 @@ const JobsPage = () => {
   const handleAddJobsModalToggle = () => {
     setShowAddJobsModal(!showAddJobsModal);
     if (!showAddJobsModal) {
-      setUpdateData({ _id:"", title:"", notes:"", subTotal:"", tax:"", total:"", tags:[], jobsData:[] });
+      setUpdateData({
+        _id: "",
+        title: "",
+        notes: "",
+        subTotal: "",
+        tax: "",
+        total: "",
+        tags: [],
+        jobsData: [],
+      });
     }
   };
 
   return (
     <div className="w-full items-center min-h-[84.2vh] mt-14">
- 
+      <Helmet>
+        <title>jobData</title>
+      </Helmet>
       <BlueCommenBtn title="Add Jobs" onClick={handleAddJobsModalToggle} />
       <ToastContainer />
       {showDeleteModal && (
@@ -67,7 +87,10 @@ const JobsPage = () => {
       <JobTable handleDelete={handleDelete} handleUpdate={handleUpdate} />
       {showAddJobsModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50 backdrop-blur-lg">
-          <AddJobs  updateData={updateData} handleModalToggle={handleAddJobsModalToggle} />
+          <AddJobs
+            updateData={updateData}
+            handleModalToggle={handleAddJobsModalToggle}
+          />
         </div>
       )}
     </div>

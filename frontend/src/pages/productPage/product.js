@@ -7,6 +7,7 @@ import ProductTable from "../../components/ProductPageComponents/ProductTabel";
 import DeleteConfirmationModal from "../../components/JobPageComponents/DeleteModel";
 import BlueCommenBtn from "../../components/commen/BlueCommenBtn";
 import LoadingCom from "../../components/commen/LoadingAnimation";
+import { Helmet } from "react-helmet";
 
 const ProductsPage = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,9 @@ const ProductsPage = () => {
 
   return (
     <div className="w-full flex flex-col min-h-[84.2vh]  items-center mt-14">
+      <Helmet>
+        <title>ProductData</title>
+      </Helmet>
       <ToastContainer />
       <BlueCommenBtn title="Add Product" onClick={handleModalToggle} />
       {showDeleteModal && (
