@@ -1,1 +1,1 @@
-Live App : - [https://invoiceappmern.netlify.app/]
+Live App : - https://invoiceappmern.netlify.app/
