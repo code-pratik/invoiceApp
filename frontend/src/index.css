@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#successToast {
+    background-color: #4caf50; 
+    color: #fff; 
+    font-weight: bold;
+    border: 2px solid rgb(230, 188, 84);
+  }
+
+  
