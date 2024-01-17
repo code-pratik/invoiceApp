@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createJob,
-  getJobs,
-  updateJob,
-  updateJobs,
-} from "../../pages/jobPage/jobSlice";
+import { createJob, updateJobs } from "../../pages/jobPage/jobSlice";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
 import { tags } from "../constents/formConstent";
@@ -37,7 +32,7 @@ const customStyles = {
   }),
 };
 
-const AddJobs = ({handleModalToggle,updateData}) => {
+const AddJobs = ({ handleModalToggle, updateData }) => {
   const {
     register,
     handleSubmit,
@@ -45,7 +40,7 @@ const AddJobs = ({handleModalToggle,updateData}) => {
     reset,
   } = useForm();
   const dispatch = useDispatch();
- 
+
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [subtotal, setSubtotal] = useState(0);
@@ -59,7 +54,7 @@ const AddJobs = ({handleModalToggle,updateData}) => {
     const selectedProductsvalue = selectedProducts.map((item) => item["_id"]);
     const selectedTagsValues = selectedTags.map((tag) => tag.value);
     const jobData = {
-      id:data["_id"],
+      id: data["_id"],
       title: data.title,
       notes: data.notes,
       products: selectedProductsvalue,
@@ -69,35 +64,41 @@ const AddJobs = ({handleModalToggle,updateData}) => {
       tax: tax.toFixed(2),
       createdBy: "testuser",
     };
-    dispatch(updateJobs({ id: updateData["_id"], data: jobData })).then((res) => {
-      console.log(res)
-      if (res.payload?.message) {
-        reset({ name: "", description: "", price: "" });
-        toast.success(res.payload.message, {
-          toastId: "successToast",
-          autoClose: 3000,
-          toastClassName: "bg-green-500 text-white font-bold",
-        });
-        handleModalToggle();
-      } else {
-        toast.error("Failed to update job");
+    dispatch(updateJobs({ id: updateData["_id"], data: jobData })).then(
+      (res) => {
+        console.log(res);
+        if (res.payload?.message) {
+          reset({ name: "", description: "", price: "" });
+          toast.success(res.payload.message, {
+            toastId: "successToast",
+            autoClose: 3000,
+            toastClassName: "bg-green-500 text-white font-bold",
+          });
+          handleModalToggle();
+        } else {
+          toast.error("Failed to update job");
+        }
       }
-    });
+    );
   };
 
   useEffect(() => {
     if (updateData) {
       reset(updateData);
     }
-    const selectedProductsData  = (updateData?.jobsData || []).map((item) =>{
-      return {value:item?.name,label:item?.name+"-$"+item?.price,_id:item["_id"]}
-    })
-    const selectedJobsData=  (updateData?.tags || []).map((item) =>{
-      return {value:item,label:item}
-    })
-    setSelectedProducts(selectedProductsData)
-    setSelectedTags(selectedJobsData)
-    calculateSubtotal(selectedProductsData)
+    const selectedProductsData = (updateData?.jobsData || []).map((item) => {
+      return {
+        value: item?.name,
+        label: item?.name + "-$" + item?.price,
+        _id: item["_id"],
+      };
+    });
+    const selectedJobsData = (updateData?.tags || []).map((item) => {
+      return { value: item, label: item };
+    });
+    setSelectedProducts(selectedProductsData);
+    setSelectedTags(selectedJobsData);
+    calculateSubtotal(selectedProductsData);
   }, [updateData]);
   const calculateSubtotal = (selectedOptions) => {
     let subTotalAmount = 0;
@@ -129,52 +130,56 @@ const AddJobs = ({handleModalToggle,updateData}) => {
       products: selectedProductsvalue,
       tags: selectedTagsValues,
       total: total.toFixed(2),
-      subTotal:subtotal.toFixed(2),
+      subTotal: subtotal.toFixed(2),
       tax: tax.toFixed(2),
       createdBy: "testuser",
     };
-    dispatch(createJob(jobData)).then((res)=>{
+    dispatch(createJob(jobData)).then((res) => {
       if (res.payload?.message) {
         reset({ name: "", description: "", price: "" });
-        console.log(res.payload)
+        console.log(res.payload);
         toast.success(res.payload.message, {
           toastId: "successToast",
           autoClose: 3000,
           toastClassName: "bg-green-500 text-white font-bold",
         });
-        handleModalToggle()
+        handleModalToggle();
       } else {
         toast.error("Failed to create job");
       }
-    })
-    handleModalToggle()
+    });
+    handleModalToggle();
   };
 
   useEffect(() => {
-    console.log(selectedProducts,"asd")
-    calculateSubtotal(selectedProducts)
+    console.log(selectedProducts, "asd");
+    calculateSubtotal(selectedProducts);
   }, [selectedProducts]);
 
-  useEffect(()=>{
-    if(productsData.length === 0){
-      dispatch(getProducts())
+  useEffect(() => {
+    if (productsData.length === 0) {
+      dispatch(getProducts());
     }
-  },[])
+  }, []);
 
   return (
     <div className="flex justify-center  items-center w-full h-full px-4">
-    <div className="bg-white p-6 pb-8 rounded-lg shadow-md w-full md:max-w-md relative">
-    <ToastContainer/>
-      <FontAwesomeIcon
+      <div className="bg-white p-6 pb-8 rounded-lg shadow-md w-full md:max-w-md relative">
+        <ToastContainer />
+        <FontAwesomeIcon
           icon={faTimes}
           className="absolute top-4 right-4 cursor-pointer text-gray-600 hover:text-red-500"
           onClick={() => {
-            handleModalToggle()
+            handleModalToggle();
           }}
         />
-        <h3 className="text-2xl mb-4 font-bold">{updateData?.title === "" ? "Create " : "Update "}Jobs</h3>
+        <h3 className="text-2xl mb-4 font-bold">
+          {updateData?.title === "" ? "Create " : "Update "}Jobs
+        </h3>
         <form
-          onSubmit={handleSubmit(updateData?.title === "" ? onSubmit : handelUpdate)}
+          onSubmit={handleSubmit(
+            updateData?.title === "" ? onSubmit : handelUpdate
+          )}
           className="text-left flex flex-col gap-2"
         >
           <ToastContainer />

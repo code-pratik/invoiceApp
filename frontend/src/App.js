@@ -11,8 +11,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function App() {
-
-  const theme = useSelector((state) => state.productsData?.theme);
+  const theme = useSelector((state) => state.darkMode.theme);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -21,7 +20,6 @@ function App() {
   }, [theme]);
 
   return (
-    // /products /jobs / invoice
     <div className="App">
       <BrowserRouter>
         <Routes>

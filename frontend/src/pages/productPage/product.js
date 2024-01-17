@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import ProductTable from "../../components/ProductPageComponents/ProductTabel";
 import DeleteConfirmationModal from "../../components/JobPageComponents/DeleteModel";
 import BlueCommenBtn from "../../components/commen/BlueCommenBtn";
+import LoadingCom from "../../components/commen/LoadingAnimation";
 
 const ProductsPage = () => {
   const dispatch = useDispatch();
@@ -14,9 +15,10 @@ const ProductsPage = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showFormModal, setShowFormModal] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts()).then((res) => setLoading(false));
   }, [dispatch]);
 
   const handleDelete = (id) => {
@@ -65,11 +67,15 @@ const ProductsPage = () => {
           title="product"
         />
       )}
-      <ProductTable
-        productsData={productsData}
-        handleDelete={handleDelete}
-        handleUpdate={handleUpdate}
-      />
+      {loading ? (
+        <LoadingCom />
+      ) : (
+        <ProductTable
+          productsData={productsData}
+          handleDelete={handleDelete}
+          handleUpdate={handleUpdate}
+        />
+      )}
       {showFormModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50 backdrop-blur-lg">
           <AddProductForm

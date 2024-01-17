@@ -1,20 +1,23 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { createProduct, getProducts, updateProduct } from "../../pages/productPage/productSlice";
+import {
+  createProduct,
+  getProducts,
+  updateProduct,
+} from "../../pages/productPage/productSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-
 const forminitialValue = {
-  name:"",
-  description:"",
-  price:""
-}
+  name: "",
+  description: "",
+  price: "",
+};
 
-const AddProductForm = ({ handleModalToggle,updateData }) => {
+const AddProductForm = ({ handleModalToggle, updateData }) => {
   const {
     register,
     handleSubmit,
@@ -24,7 +27,26 @@ const AddProductForm = ({ handleModalToggle,updateData }) => {
   const dispatch = useDispatch();
 
   const handleFormSubmit = (data) => {
-    dispatch(createProduct({ ...data, createdBy: "textid12345" })).then((res) => {
+    dispatch(createProduct({ ...data, createdBy: "textid12345" })).then(
+      (res) => {
+        if (res.payload?.message) {
+          dispatch(getProducts());
+          reset(forminitialValue);
+          toast.success(res.payload.message, {
+            toastId: "successToast",
+            autoClose: 3000,
+            toastClassName: "bg-green-500 text-white font-bold",
+          });
+          handleModalToggle();
+        } else {
+          toast.error("Failed to create product");
+        }
+      }
+    );
+  };
+
+  const handelUpdate = (data) => {
+    dispatch(updateProduct({ id: updateData["_id"], data })).then((res) => {
       if (res.payload?.message) {
         dispatch(getProducts());
         reset(forminitialValue);
@@ -33,33 +55,16 @@ const AddProductForm = ({ handleModalToggle,updateData }) => {
           autoClose: 3000,
           toastClassName: "bg-green-500 text-white font-bold",
         });
-        handleModalToggle()
+        handleModalToggle();
       } else {
-        toast.error("Failed to create product");
+        toast.error("Failed to update product");
       }
     });
   };
 
-  const handelUpdate = (data) =>{
-    dispatch(updateProduct({id:updateData["_id"],data})).then((res) => {
-      if (res.payload?.message) {
-        dispatch(getProducts());
-        reset(forminitialValue);
-        toast.success(res.payload.message, {
-          toastId: "successToast",
-          autoClose: 3000,
-          toastClassName: "bg-green-500 text-white font-bold",
-        });
-        handleModalToggle()
-      } else {
-        toast.error("Failed to update product");
-      }
-  })
-}
-
-  useEffect(()=>{
-    reset(updateData)
-  },[])
+  useEffect(() => {
+    reset(updateData);
+  }, [reset, updateData]);
 
   return (
     <div className="flex justify-center  items-center w-full h-full px-4">
@@ -68,11 +73,18 @@ const AddProductForm = ({ handleModalToggle,updateData }) => {
           icon={faTimes}
           className="absolute top-4 right-4 cursor-pointer text-gray-600 hover:text-red-500"
           onClick={() => {
-            handleModalToggle()
+            handleModalToggle();
           }}
         />
-        <h3 className="text-2xl mb-4 font-bold">{updateData?.name === "" ? "Create "  : "Update "}Product</h3>
-        <form onSubmit={handleSubmit(updateData?.name === "" ? handleFormSubmit : handelUpdate)} className="text-left flex flex-col gap-2">
+        <h3 className="text-2xl mb-4 font-bold">
+          {updateData?.name === "" ? "Create " : "Update "}Product
+        </h3>
+        <form
+          onSubmit={handleSubmit(
+            updateData?.name === "" ? handleFormSubmit : handelUpdate
+          )}
+          className="text-left flex flex-col gap-2"
+        >
           <ToastContainer />
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Name</label>
@@ -92,10 +104,14 @@ const AddProductForm = ({ handleModalToggle,updateData }) => {
                 },
               })}
             />
-            {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+            {errors.name && (
+              <p className="text-red-500">{errors.name.message}</p>
+            )}
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Description</label>
+            <label className="block text-sm font-medium mb-1">
+              Description
+            </label>
             <input
               type="text"
               placeholder="Enter description"
@@ -131,7 +147,9 @@ const AddProductForm = ({ handleModalToggle,updateData }) => {
                 },
               })}
             />
-            {errors.price && <p className="text-red-500">{errors.price.message}</p>}
+            {errors.price && (
+              <p className="text-red-500">{errors.price.message}</p>
+            )}
           </div>
           <button
             type="submit"

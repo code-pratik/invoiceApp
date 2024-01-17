@@ -1,26 +1,27 @@
-
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
-import productsReducer from "./pages/productPage/productSlice"
+import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
+import productsReducer from "./pages/productPage/productSlice";
 import jobReducer from "./pages/jobPage/jobSlice";
 import invoicesReducer from "./pages/invoicepage/invoiceSlice";
-
-const rootReducer = combineReducers({ 
-    productsData: productsReducer,
-    jobsData:jobReducer,
-    invoicesData: invoicesReducer
-  })
+import darkModeReducer from "./components/DarkMode/darkSlice";
+const rootReducer = combineReducers({
+  darkMode: darkModeReducer,
+  productsData: productsReducer,
+  jobsData: jobReducer,
+  invoicesData: invoicesReducer,
+});
 
 const persistConfig = {
-  key: 'root',
+  key: "root",
   storage,
-}
+  whitelist: ["darkMode"],
+};
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer
-})
+  reducer: persistedReducer,
+});
 
-export const persistor = persistStore(store)
+export const persistor = persistStore(store);

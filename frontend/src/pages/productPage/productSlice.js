@@ -4,7 +4,7 @@ import axios from "axios";
 export const getProducts = createAsyncThunk("/api/data/users", async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8080/api/products/getProducts"
+      `${process.env.REACT_APP_APIPATH}/api/products/getProducts`
     );
     console.log(response.data.data, "asda");
     return response.data;
@@ -19,7 +19,7 @@ export const createProduct = createAsyncThunk(
     console.log(data, "adsajsres");
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/products/createProduct`,
+        `${process.env.REACT_APP_APIPATH}/api/products/createProduct`,
         data
       );
       return response.data;
@@ -34,9 +34,9 @@ export const deleteProduct = createAsyncThunk(
   async (id) => {
     try {
       const response = await axios.patch(
-        `http://localhost:8080/api/products/deleteProduct/${id}`
+        `${process.env.REACT_APP_APIPATH}/api/products/deleteProduct/${id}`
       );
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error) {
       return error;
@@ -44,46 +44,40 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-
-export const updateProduct =  createAsyncThunk(
+export const updateProduct = createAsyncThunk(
   "api/products/updateProduct",
-  async ({id,data}) => {
+  async ({ id, data }) => {
     try {
       const response = await axios.patch(
-        `http://localhost:8080/api/products/updateProduct/${id}`,data
+        `${process.env.REACT_APP_APIPATH}/api/products/updateProduct/${id}`,
+        data
       );
-      console.log(response)
+      console.log(response);
       return response.data;
     } catch (error) {
       return error;
     }
   }
 );
-
-
 
 const productSlice = createSlice({
   name: "product",
   initialState: {
     products: [],
-    theme: "dark"
   },
   reducers: {
     demoAction: (state, action) => {},
-    setTheme: (state, action) => {
-      state.theme = state.theme === "dark" ? "light" : "dark";
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(getProducts.fulfilled, (state, action) => {
       state.products = action.payload.data;
     });
     builder.addCase(createProduct.fulfilled, (state, action) => {
-      state.products = [...state.products  , action.payload.data];
+      state.products = [...state.products, action.payload.data];
     });
   },
 });
 
-export const { demoAction,setTheme } = productSlice.actions;
+export const { demoAction } = productSlice.actions;
 
 export default productSlice.reducer;
