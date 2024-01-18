@@ -64,9 +64,13 @@ const productSlice = createSlice({
   name: "product",
   initialState: {
     products: [],
+    menuState: false,
   },
   reducers: {
-    demoAction: (state, action) => {},
+    toggleMenu: (state, action) => {
+      state.menuState =
+        action.payload === undefined ? !state.menuState : action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getProducts.fulfilled, (state, action) => {
@@ -78,6 +82,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { demoAction } = productSlice.actions;
+export const { toggleMenu } = productSlice.actions;
 
 export default productSlice.reducer;

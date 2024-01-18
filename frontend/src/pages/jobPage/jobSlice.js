@@ -58,9 +58,6 @@ const jobSlice = createSlice({
   initialState: {
     jobs: [],
   },
-  reducers: {
-    demoAction: (state, action) => {},
-  },
   extraReducers: (builder) => {
     builder.addCase(createJob.fulfilled, (state, action) => {
       const data = {
@@ -84,7 +81,5 @@ const jobSlice = createSlice({
     });
   },
 });
-
-export const { demoAction } = jobSlice.actions;
 
 export default jobSlice.reducer;

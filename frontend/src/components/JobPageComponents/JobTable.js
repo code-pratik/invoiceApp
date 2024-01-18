@@ -76,7 +76,10 @@ const JobTable = ({ handleDelete, handleUpdate }) => {
                           },
                           index
                         ) => (
-                          <tr className="border-b border-gray-200  bg-white">
+                          <tr
+                            className="border-b border-gray-200  bg-white"
+                            key={_id}
+                          >
                             <td className="px-5 py-5 text-sm">
                               <p className="text-gray-600 whitespace-no-wrap">
                                 {index + 1}

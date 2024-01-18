@@ -34,9 +34,7 @@ const invoiceSlice = createSlice({
   initialState: {
     invoices: [],
   },
-  reducers: {
-    demoAction: (state, action) => {},
-  },
+
   extraReducers: (builder) => {
     builder.addCase(covertToInvoice.fulfilled, (state, action) => {
       state.invoices = [...(state?.invoices || []), action.payload.data];
@@ -46,7 +44,5 @@ const invoiceSlice = createSlice({
     });
   },
 });
-
-export const { demoAction } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

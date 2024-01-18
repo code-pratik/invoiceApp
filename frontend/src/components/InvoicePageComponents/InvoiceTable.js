@@ -24,7 +24,7 @@ const InvoiceTable = ({ loading }) => {
       {loading ? (
         <LoadingCom />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4  w-[100%] place-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4  w-[100%] place-items-center ">
           {invoicesData?.invoices.length ? (
             invoicesData?.invoices?.map((item, index) => (
               <div

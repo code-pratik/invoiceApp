@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import Error404 from "./pages/error/error";
 import { Layout } from "./layout/layout";
@@ -20,7 +19,7 @@ function App() {
   }, [theme]);
 
   return (
-    <div className="App">
+    <div className="App ">
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>

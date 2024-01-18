@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,22 +12,25 @@ import {
   faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import DarkMode from "../../components/DarkMode/DarkMode";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMenu } from "../../pages/productPage/productSlice";
 
 const Nav = () => {
   const location = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const theme = useSelector((state) => state.darkMode.theme);
+  const dispatch = useDispatch();
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+  const theme = useSelector((state) => state.darkMode.theme);
+  const menuOpen = useSelector((state) => state.productsData.menuState);
+  const handelMenu = (e) => {
+    e.stopPropagation();
+    dispatch(toggleMenu());
   };
 
   return (
     <>
-      <div className="w-screen   bg-[#1F2937] py-2 md:hidden  absolute  z-60 ">
+      <div className="w-screen   bg-[#1F2937] py-2 md:hidden fixed  z-60 ">
         <div className="md:hidden flex w-full justify-between">
-          <button onClick={toggleMenu} className="text-white px-4">
+          <button onClick={handelMenu} className="text-white px-4">
             <FontAwesomeIcon icon={faBars} size="lg" />
           </button>
           <img src="/assets/images/logo.png" alt="Logo" className="h-12 " />
@@ -43,17 +46,15 @@ const Nav = () => {
           <FontAwesomeIcon
             icon={faClose}
             className="absolute right-5 top-3  md:hidden"
-            onClick={toggleMenu}
+            onClick={handelMenu}
           />
           <li>
             <NavLink
-              exact
               to="/"
-              onClick={toggleMenu}
+              onClick={handelMenu}
               className={`nav-link px-4 py-2 inline-block hover:bg-gray-700 ${
                 location.pathname === "/" && "text-green-400"
               }`}
-              activeClassName="active-nav-link"
             >
               <FontAwesomeIcon icon={faHome} className="mr-2" />
               Home
@@ -61,13 +62,11 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
-              exact
               to="/products"
-              onClick={toggleMenu}
+              onClick={handelMenu}
               className={`nav-link px-4 py-2 inline-block hover:bg-gray-700 ${
                 location.pathname === "/products" && "text-green-400"
               }`}
-              activeClassName="active-nav-link"
             >
               <FontAwesomeIcon icon={faCube} className="mr-2" />
               Products
@@ -75,13 +74,11 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
-              exact
               to="/jobs"
-              onClick={toggleMenu}
+              onClick={handelMenu}
               className={`nav-link px-4 py-2 inline-block hover:bg-gray-700 ${
                 location.pathname === "/jobs" && "text-green-400"
               }`}
-              activeClassName="active-nav-link"
             >
               <FontAwesomeIcon icon={faBriefcase} className="mr-2" />
               Jobs
@@ -89,19 +86,17 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
-              exact
               to="/invoice"
-              onClick={toggleMenu}
+              onClick={handelMenu}
               className={`nav-link px-4 py-2 inline-block hover:bg-gray-700 ${
                 location.pathname === "/invoice" && "text-green-400"
               }`}
-              activeClassName="active-nav-link"
             >
               <FontAwesomeIcon icon={faFileAlt} className="mr-2" />
               Invoice
             </NavLink>
           </li>
-          <li className=" ml-3 flex gap-2 items-center">
+          <li className=" ml-3 flex gap-2 items-center py-2">
             {theme === "dark" ? (
               <>
                 <FontAwesomeIcon icon={faMoon} />
